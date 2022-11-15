@@ -37,7 +37,7 @@ To retrieve the current list of all members:
 ```
 curl --location --request GET 'localhost:3000/users'
 ```
-To add a new user:
+To add a new user (do not specify id field as it is automatically generated):
 ```
 curl --location --request POST 'localhost:3000/users' \
 --header 'Content-Type: application/json' \
