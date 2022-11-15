@@ -1,10 +1,11 @@
-import { time } from "console";
-import { resolve } from "path";
-
+// Represents a MySQL database which can be interacted with, but could be extended
+// to represent any other type of database which has a JS driver
 class Database {
     conn :any
     constructor() {
         var mysql = require('mysql2');
+        // Hardcoded username and password for simplicity, could change to accept
+        // user input or similar 
         this.conn = mysql.createConnection({
             host: 'localhost',
             user: 'mysql',
@@ -13,6 +14,7 @@ class Database {
         })
     }
 
+    // Creates the database and table needed if they do not already exist
     init() {
         console.log("Database connected")
         var sql :string = 'CREATE DATABASE IF NOT EXISTS donaciktbackend;'
@@ -29,6 +31,7 @@ class Database {
         }) 
     }
 
+    // Returns all entries in the members table 
     getAll() {
         return new Promise((resolve) => {
             var sql = 'USE donaciktbackend;'
@@ -43,6 +46,7 @@ class Database {
         })
     }
 
+    // Gets a specific row from the members table identified by an ID number
     getRow(id :Number) {
         return new Promise((resolve) => {
             var sql = 'USE donaciktbackend;'
@@ -57,6 +61,8 @@ class Database {
         })
     }
 
+    // Inserts a new row in the members table based on the given JSON object which
+    // should contain all required fields
     insert(inputs :JSON) {
         return new Promise((resolve) => {
             var keys :string = ""
@@ -80,6 +86,8 @@ class Database {
         })
     }
 
+    // Edits a row based on given ID and input JSON. Will edit only the provided fields
+    // and keep others unchanged
     edit(id :number, inputs :JSON) {
         return new Promise((resolve) => {
             var set :string = ""
@@ -101,6 +109,7 @@ class Database {
         })
     }
 
+    // Deletes a row with the given ID number
     delete(id :number) {
         var sql = 'USE donaciktbackend;'
         this.conn.query(sql, (err: Error, result: any) => {

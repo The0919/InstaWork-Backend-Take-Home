@@ -10,53 +10,64 @@ This project was written using NodeJS in Typescript which interfaces with a MySQ
 
 ### Dependencies
 
+* Linux+BASH environment
 * NodeJS
 * MySQL
 
 ### Installing
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+* Clone this repository
+```
+git clone https://github.com/The0919/InstaWork-Backend-Take-Home
+```
+* Make sure MySQL is working as expected
+* Create a MySQL user mysql@localhost with password 'password' and permissions to create databases. In a production program this would be replaced with an established user on a remote database
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+* Move inside the root of the project and run the server start command
 ```
-code blocks for commands
+cd InstaWork-Backend-Take-Home/
+npx ts-node source/server.ts
+```
+### HTTP Examples
+Once the server is running on localhost:3000, HTTP GET and POST requests can be sent to it.
+
+To retrieve the current list of all members:
+```
+curl --location --request GET 'localhost:3000/users'
+```
+To add a new user:
+```
+curl --location --request POST 'localhost:3000/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{"firstName":"Theo","lastName":"Donacik","phone":"6077440159","emailId":"donacik.t@norhteastern.edu","role":0}'
+```
+To delete a specific user (ex a user with an ID of 12)
+```
+curl --location --request GET 'localhost:3000/users/12'
+```
+Or to edit a specific user (ex a user with an ID of 13)
+```
+curl --location --request POST 'localhost:3000/users/13' \
+--header 'Content-Type: application/json' \
+--data-raw '{"firstName":"Theodore","emailId":"tdonacik@instawork.com","role":1}'
 ```
 
 ## Help
 
-Any advise for common problems or issues.
+If you receive an error 
 ```
-command to run if program contains helper info
+Error: connect ENOENT /var/run/mysqld/mysqld.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1300:16) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'connect',
+  address: '/var/run/mysqld/mysqld.sock',
+  fatal: true
 ```
+Then it is likely that your mysqld.sock is not located at the given address. This should be the default for most linux distributions as it was for my desktop, but in my Fedora VM for example this was located at /var/lib/mysql/mysql.sock instead. You may need to find this socket on your own system and replace the line 12 in ./controllers/database.ts to reflect this difference.
 
 ## Authors
 
-Contributors names and contact info
-
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
-
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+Theo Donacik (donacik.t@northeastern.edu)

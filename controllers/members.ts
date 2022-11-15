@@ -2,10 +2,11 @@ import { ServerResponse, IncomingMessage } from "http";
 import { ResultSetHeader } from "mysql2";
 import { Database } from "./database";
 
+// Asynchronously reads the data from the given database and returns a response with a code of 200
+// if the process succeeds, or 500 and the error code if the response fails
 const getMembers = async (req: IncomingMessage, res: ServerResponse, db :Database) => {
     try {
         var result = await db.getAll()
-        console.log(result)
     } catch (err) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
@@ -34,6 +35,7 @@ const addMember = async (req: IncomingMessage, res: ServerResponse, db :Database
     req.on('end', async () =>{
         try {
             var result = await db.insert(JSON.parse(body))
+            console.log(result)
         } 
         catch (err) {
         res.writeHead(500, { "Content-Type": "application/json" });
@@ -67,8 +69,6 @@ const editMember = async (req: IncomingMessage, res: ServerResponse, id: number,
         try {
             var result = await db.edit(id, JSON.parse(body))
             var message = await db.getRow(id)
-            console.log(result)
-            console.log(message)
         } 
         catch (err) {
         res.writeHead(500, { "Content-Type": "application/json" });
@@ -94,7 +94,6 @@ const editMember = async (req: IncomingMessage, res: ServerResponse, id: number,
 const deleteMember = async (req: IncomingMessage, res: ServerResponse, id: number, db :Database) => {
     try {
         var result = await db.delete(id)
-        console.log(result)
     } catch (err) {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(
